@@ -1,12 +1,12 @@
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
-import { useAuth } from '../contexts/AuthContext';
+import { Outlet, NavLink, useNavigate } from "react-router-dom";
+import { useAuth } from "../contexts/AuthContext";
 
 const navItems = [
-  { to: '/',         icon: '🏠', label: 'داشبورد',    end: true },
-  { to: '/programs', icon: '📅', label: 'برنامه‌ها'            },
-  { to: '/people',   icon: '👥', label: 'افراد'                },
-  { to: '/stats',    icon: '📊', label: 'نمایش آمار'           },
-  { to: '/reports',  icon: '📋', label: 'گزارش‌ها'             },
+  { to: "/", icon: "🏠", label: "داشبورد", end: true },
+  { to: "/programs", icon: "📅", label: "برنامه‌ها" },
+  { to: "/people", icon: "👥", label: "افراد" },
+  { to: "/stats", icon: "📊", label: "نمایش آمار" },
+  { to: "/reports", icon: "📋", label: "گزارش‌ها" },
 ];
 
 export default function Layout() {
@@ -15,12 +15,11 @@ export default function Layout() {
 
   const handleSignOut = async () => {
     await signOut();
-    navigate('/login');
+    navigate("/login");
   };
 
   return (
     <>
-      {/* ===== Top Bar ===== */}
       <header className="top-bar">
         <div className="brand">
           📋 سامانه سازماندهی
@@ -34,9 +33,7 @@ export default function Layout() {
         </div>
       </header>
 
-      {/* ===== Body ===== */}
       <div className="app-layout">
-        {/* Sidebar */}
         <aside className="sidebar">
           <nav className="nav-group">
             {navItems.map((item) => (
@@ -45,7 +42,7 @@ export default function Layout() {
                 to={item.to}
                 end={item.end}
                 className={({ isActive }) =>
-                  'nav-item' + (isActive ? ' active' : '')
+                  "nav-item" + (isActive ? " active" : "")
                 }
               >
                 <span className="nav-icon">{item.icon}</span>
@@ -55,7 +52,6 @@ export default function Layout() {
           </nav>
         </aside>
 
-        {/* Main */}
         <main className="main-content">
           <Outlet />
         </main>

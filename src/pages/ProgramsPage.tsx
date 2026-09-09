@@ -1,45 +1,57 @@
-import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { supabase } from '../lib/supabase';
-import { toJalali } from '../utils/date';
-import type { Program, ProgramFormData } from '../types';
-import Modal from '../components/Modal';
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { supabase } from "../lib/supabase";
+import { toJalali } from "../utils/date";
+import type { Program, ProgramFormData } from "../types";
+import Modal from "../components/Modal";
 
 const EMPTY_FORM: ProgramFormData = {
-  name: '', description: '', date: '', start_time: '', end_time: '',
+  name: "",
+  description: "",
+  date: "",
+  start_time: "",
+  end_time: "",
 };
 
 export default function ProgramsPage() {
-  const [programs, setPrograms]   = useState<Program[]>([]);
-  const [loading, setLoading]     = useState(true);
-  const [search, setSearch]       = useState('');
+  const [programs, setPrograms] = useState<Program[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [editTarget, setEditTarget] = useState<Program | null>(null);
-  const [form, setForm]           = useState<ProgramFormData>(EMPTY_FORM);
-  const [saving, setSaving]       = useState(false);
-  const [deleteId, setDeleteId]   = useState<string | null>(null);
+  const [form, setForm] = useState<ProgramFormData>(EMPTY_FORM);
+  const [saving, setSaving] = useState(false);
+  const [deleteId, setDeleteId] = useState<string | null>(null);
 
-  useEffect(() => { fetchPrograms(); }, []);
+  useEffect(() => {
+    fetchPrograms();
+  }, []);
 
   async function fetchPrograms() {
     setLoading(true);
     const { data } = await supabase
-      .from('programs')
-      .select('*')
-      .order('date', { ascending: false });
+      .from("programs")
+      .select("*")
+      .order("date", { ascending: false });
     setPrograms((data as Program[]) ?? []);
     setLoading(false);
   }
 
   function openCreate() {
     setEditTarget(null);
-    setForm({ ...EMPTY_FORM, date: new Date().toISOString().split('T')[0] });
+    setForm({ ...EMPTY_FORM, date: new Date().toISOString().split("T")[0] });
     setShowModal(true);
   }
 
   function openEdit(p: Program) {
     setEditTarget(p);
-    setForm({ name: p.name, description: p.description, date: p.date, start_time: p.start_time, end_time: p.end_time ?? '' });
+    setForm({
+      name: p.name,
+      description: p.description,
+      date: p.date,
+      start_time: p.start_time,
+      end_time: p.end_time ?? "",
+    });
     setShowModal(true);
   }
 
@@ -47,9 +59,14 @@ export default function ProgramsPage() {
     if (!form.name || !form.date || !form.start_time) return;
     setSaving(true);
     if (editTarget) {
-      await supabase.from('programs').update({ ...form, end_time: form.end_time || null }).eq('id', editTarget.id);
+      await supabase
+        .from("programs")
+        .update({ ...form, end_time: form.end_time || null })
+        .eq("id", editTarget.id);
     } else {
-      await supabase.from('programs').insert({ ...form, end_time: form.end_time || null });
+      await supabase
+        .from("programs")
+        .insert({ ...form, end_time: form.end_time || null });
     }
     setSaving(false);
     setShowModal(false);
@@ -57,22 +74,27 @@ export default function ProgramsPage() {
   }
 
   async function handleDelete(id: string) {
-    await supabase.from('programs').delete().eq('id', id);
+    await supabase.from("programs").delete().eq("id", id);
     setDeleteId(null);
     fetchPrograms();
   }
 
-  const filtered = programs.filter((p) =>
-    p.name.includes(search) || p.description.includes(search)
+  const filtered = programs.filter(
+    (p) => p.name.includes(search) || p.description.includes(search),
   );
 
-  const field = (key: keyof ProgramFormData, label: string, type = 'text', placeholder = '') => (
+  const field = (
+    key: keyof ProgramFormData,
+    label: string,
+    type = "text",
+    placeholder = "",
+  ) => (
     <div className="field">
       <label>{label}</label>
       <input
         type={type}
         placeholder={placeholder}
-        value={(form[key] as string) ?? ''}
+        value={(form[key] as string) ?? ""}
         onChange={(e) => setForm((f) => ({ ...f, [key]: e.target.value }))}
       />
     </div>
@@ -80,7 +102,6 @@ export default function ProgramsPage() {
 
   return (
     <div>
-      {/* Header */}
       <div className="section-header mb-24">
         <h2>📅 برنامه‌ها</h2>
         <button className="btn btn-primary" onClick={openCreate}>
@@ -88,7 +109,6 @@ export default function ProgramsPage() {
         </button>
       </div>
 
-      {/* Search */}
       <div className="mb-16">
         <input
           placeholder="🔍 جستجو در برنامه‌ها..."
@@ -98,9 +118,10 @@ export default function ProgramsPage() {
         />
       </div>
 
-      {/* Table */}
       {loading ? (
-        <div className="loading-screen" style={{ minHeight: 200 }}>در حال بارگذاری...</div>
+        <div className="loading-screen" style={{ minHeight: 200 }}>
+          در حال بارگذاری...
+        </div>
       ) : filtered.length === 0 ? (
         <div className="card">
           <div className="empty-state">
@@ -128,17 +149,26 @@ export default function ProgramsPage() {
                   <td className="font-bold">{p.name}</td>
                   <td>{toJalali(p.date)}</td>
                   <td>{p.start_time}</td>
-                  <td>{p.end_time ?? '—'}</td>
-                  <td className="text-muted text-sm">{p.description || '—'}</td>
+                  <td>{p.end_time ?? "—"}</td>
+                  <td className="text-muted text-sm">{p.description || "—"}</td>
                   <td>
                     <div className="flex gap-6">
-                      <Link to={`/programs/${p.id}`} className="btn btn-light btn-sm">
+                      <Link
+                        to={`/programs/${p.id}`}
+                        className="btn btn-light btn-sm"
+                      >
                         🔍 جزئیات
                       </Link>
-                      <button className="btn btn-ghost btn-sm" onClick={() => openEdit(p)}>
+                      <button
+                        className="btn btn-ghost btn-sm"
+                        onClick={() => openEdit(p)}
+                      >
                         ✏️ ویرایش
                       </button>
-                      <button className="btn btn-danger btn-sm" onClick={() => setDeleteId(p.id)}>
+                      <button
+                        className="btn btn-danger btn-sm"
+                        onClick={() => setDeleteId(p.id)}
+                      >
                         🗑️
                       </button>
                     </div>
@@ -150,25 +180,39 @@ export default function ProgramsPage() {
         </div>
       )}
 
-      {/* Create / Edit Modal */}
       {showModal && (
         <Modal
-          title={editTarget ? 'ویرایش برنامه' : 'برنامه جدید'}
+          title={editTarget ? "ویرایش برنامه" : "برنامه جدید"}
           onClose={() => setShowModal(false)}
           footer={
             <>
-              <button className="btn btn-primary" onClick={handleSave} disabled={saving}>
-                {saving ? 'در حال ذخیره...' : editTarget ? '💾 ذخیره تغییرات' : '✅ ایجاد برنامه'}
+              <button
+                className="btn btn-primary"
+                onClick={handleSave}
+                disabled={saving}
+              >
+                {saving
+                  ? "در حال ذخیره..."
+                  : editTarget
+                    ? "💾 ذخیره تغییرات"
+                    : "✅ ایجاد برنامه"}
               </button>
-              <button className="btn btn-ghost" onClick={() => setShowModal(false)}>انصراف</button>
+              <button
+                className="btn btn-ghost"
+                onClick={() => setShowModal(false)}
+              >
+                انصراف
+              </button>
             </>
           }
         >
           <div className="form-grid">
-            <div className="form-full">{field('name', 'نام برنامه *', 'text', 'مثال: کلاس React')}</div>
-            {field('date', 'تاریخ *', 'date')}
-            {field('start_time', 'ساعت شروع *', 'time')}
-            {field('end_time', 'ساعت پایان', 'time')}
+            <div className="form-full">
+              {field("name", "نام برنامه *", "text", "مثال: کلاس React")}
+            </div>
+            {field("date", "تاریخ *", "date")}
+            {field("start_time", "ساعت شروع *", "time")}
+            {field("end_time", "ساعت پایان", "time")}
             <div className="form-full">
               <div className="field">
                 <label>توضیحات</label>
@@ -176,8 +220,10 @@ export default function ProgramsPage() {
                   rows={3}
                   placeholder="توضیحات اختیاری..."
                   value={form.description}
-                  onChange={(e) => setForm((f) => ({ ...f, description: e.target.value }))}
-                  style={{ resize: 'vertical' }}
+                  onChange={(e) =>
+                    setForm((f) => ({ ...f, description: e.target.value }))
+                  }
+                  style={{ resize: "vertical" }}
                 />
               </div>
             </div>
@@ -185,17 +231,24 @@ export default function ProgramsPage() {
         </Modal>
       )}
 
-      {/* Delete Confirm Modal */}
       {deleteId && (
         <Modal
           title="حذف برنامه"
           onClose={() => setDeleteId(null)}
           footer={
             <>
-              <button className="btn btn-danger" onClick={() => handleDelete(deleteId)}>
+              <button
+                className="btn btn-danger"
+                onClick={() => handleDelete(deleteId)}
+              >
                 🗑️ بله، حذف شود
               </button>
-              <button className="btn btn-ghost" onClick={() => setDeleteId(null)}>انصراف</button>
+              <button
+                className="btn btn-ghost"
+                onClick={() => setDeleteId(null)}
+              >
+                انصراف
+              </button>
             </>
           }
         >

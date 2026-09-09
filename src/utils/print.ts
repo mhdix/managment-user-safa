@@ -1,13 +1,7 @@
-// =============================================
-// ابزار چاپ و PDF
-// از window.print() استفاده می‌کنیم چون
-// jsPDF از فونت فارسی به‌طور native پشتیبانی نمی‌کند
-// =============================================
-
 import type { Attendance, Program, Person } from '../types';
 import { toJalali, formatTime, formatDuration, durationMinutes } from './date';
 
-/** چاپ گزارش برنامه (یک جلسه) */
+
 export function printProgramReport(
   program: Program,
   attendances: Attendance[]
@@ -24,8 +18,8 @@ export function printProgramReport(
         a.status === 'حاضر'
           ? '#0f9d67'
           : a.status === 'تاخیر'
-          ? '#d88a13'
-          : '#d9465f';
+            ? '#d88a13'
+            : '#d9465f';
       return `
         <tr>
           <td>${name}</td>
@@ -59,7 +53,7 @@ export function printProgramReport(
   openPrintWindow(html);
 }
 
-/** چاپ گزارش فرد */
+
 export function printPersonReport(
   person: Person,
   attendances: Attendance[]
@@ -76,8 +70,8 @@ export function printPersonReport(
         a.status === 'حاضر'
           ? '#0f9d67'
           : a.status === 'تاخیر'
-          ? '#d88a13'
-          : '#d9465f';
+            ? '#d88a13'
+            : '#d9465f';
       return `
         <tr>
           <td>${a.program?.name ?? '—'}</td>
@@ -111,7 +105,7 @@ export function printPersonReport(
   openPrintWindow(html);
 }
 
-/** چاپ گزارش کلی */
+
 export function printFullReport(attendances: Attendance[]): void {
   const rows = attendances
     .map((a) => {
@@ -122,8 +116,8 @@ export function printFullReport(attendances: Attendance[]): void {
         a.status === 'حاضر'
           ? '#0f9d67'
           : a.status === 'تاخیر'
-          ? '#d88a13'
-          : '#d9465f';
+            ? '#d88a13'
+            : '#d9465f';
       return `
         <tr>
           <td>${name}</td>

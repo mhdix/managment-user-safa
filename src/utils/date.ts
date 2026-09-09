@@ -1,8 +1,4 @@
-// =============================================
-// ابزارهای تاریخ و زمان
-// =============================================
 
-/** تبدیل تاریخ میلادی به شمسی (ساده) */
 export function toJalali(dateStr: string): string {
   if (!dateStr) return '';
   try {
@@ -17,7 +13,6 @@ export function toJalali(dateStr: string): string {
   }
 }
 
-/** نمایش ساعت از ISO timestamp */
 export function formatTime(iso: string | null): string {
   if (!iso) return '—';
   try {
@@ -31,8 +26,6 @@ export function formatTime(iso: string | null): string {
     return '—';
   }
 }
-
-/** نمایش تاریخ + ساعت */
 export function formatDateTime(iso: string | null): string {
   if (!iso) return '—';
   try {
@@ -50,24 +43,24 @@ export function formatDateTime(iso: string | null): string {
   }
 }
 
-/** تاریخ امروز به فرمت YYYY-MM-DD */
+
 export function todayStr(): string {
   return new Date().toISOString().split('T')[0];
 }
 
-/** timestamp الان */
+
 export function nowISO(): string {
   return new Date().toISOString();
 }
 
-/** محاسبه مدت زمان بین دو timestamp (به دقیقه) */
+
 export function durationMinutes(from: string | null, to: string | null): number {
   if (!from || !to) return 0;
   const diff = new Date(to).getTime() - new Date(from).getTime();
   return Math.max(0, Math.round(diff / 60000));
 }
 
-/** نمایش مدت زمان به فارسی */
+
 export function formatDuration(minutes: number): string {
   if (minutes <= 0) return '—';
   const h = Math.floor(minutes / 60);

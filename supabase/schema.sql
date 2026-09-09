@@ -1,7 +1,3 @@
--- =============================================
--- سامانه حضور و غیاب - Supabase Schema
--- =============================================
-
 -- 1. People (افراد)
 CREATE TABLE IF NOT EXISTS public.people (
   id          UUID    DEFAULT gen_random_uuid() PRIMARY KEY,
@@ -74,7 +70,6 @@ CREATE TRIGGER set_attendances_updated_at
   FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- =============================================
--- نحوه استفاده:
 -- 1. وارد Supabase Dashboard شوید
 -- 2. SQL Editor را باز کنید
 -- 3. این کد را اجرا کنید

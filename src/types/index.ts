@@ -1,6 +1,3 @@
-// =============================================
-// تعریف تمام تایپ‌های پروژه
-// =============================================
 
 export interface Person {
   id: string;
@@ -14,8 +11,8 @@ export interface Program {
   id: string;
   name: string;
   description: string;
-  date: string;         // YYYY-MM-DD
-  start_time: string;   // HH:MM
+  date: string;
+  start_time: string;
   end_time: string | null;
   created_at: string;
 }
@@ -27,13 +24,13 @@ export interface Attendance {
   program_id: string;
   person_id: string;
   status: AttendanceStatus;
-  check_in_time: string | null;   // ISO timestamp
-  check_out_time: string | null;  // ISO timestamp
+  check_in_time: string | null;
+  check_out_time: string | null;
   reason: string;
-  date: string;   // YYYY-MM-DD
+  date: string;
   created_at: string;
   updated_at: string;
-  // relations (joined)
+
   person?: Person;
   program?: Program;
 }
@@ -45,11 +42,11 @@ export interface ProgramParticipant {
   person?: Person;
 }
 
-// برای فرم‌ها
+
 export type PersonFormData = Omit<Person, 'id' | 'created_at'>;
 export type ProgramFormData = Omit<Program, 'id' | 'created_at'>;
 
-// آمار فرد
+
 export interface PersonStats {
   total: number;
   present: number;
@@ -58,7 +55,7 @@ export interface PersonStats {
   presentPercent: number;
 }
 
-// آمار برنامه
+
 export interface ProgramStats {
   total: number;
   present: number;
